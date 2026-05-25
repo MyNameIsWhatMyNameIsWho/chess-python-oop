@@ -1,37 +1,44 @@
-# Python Chess Game (2 Players) (INSTRUCTIONS ARE ONLY IN RUSSIAN)
+# Chess + Custom Figures (Python)
 
-This Python Chess Game is a simple implementation of the classic board game designed for two players. The game follows standard chess rules, allowing players to take turns and make strategic moves to checkmate their opponent. No AI is included, making it a perfect choice for two human players.
+A terminal chess implementation for two players, extended with a **custom "new figures" game mode** featuring compound pieces not in standard chess. Built as an early exercise in OOP design and extensible class hierarchies.
 
-## Getting Started
+**Language:** Python 3 · **Library:** colorama (colored terminal board)
 
-1. **Clone the Repository:**
+---
 
-    ```bash
-    git clone https://github.com/MyNameIsWhatMyNameIsWho/chess-python-oop.git
-    ```
+## Game modes
 
-2. **Navigate to the Project Directory:**
+| Mode | Description |
+|------|-------------|
+| **Classic** | Standard chess rules — all standard pieces, full move validation |
+| **New Figures** | Adds compound pieces: **QK** (Queen+Knight), **RK** (Rook+Knight), **BK** (Bishop+Knight) |
+| **Piece mode** | Special board with **Piece** and **PieceKing** — jump/capture rules on an alternate `PieceBoard` |
 
-    ```bash
-    cd chess-python-oop
-    ```
+---
 
-3. **Run the Game:**
+## Architecture
 
-    ```bash
-    python main.py
-    ```
+Piece behavior is defined by class inheritance — each piece type overrides `get_moves()` on the `Fig` base class. Adding a new piece type means creating a new subclass with its own movement logic; existing validation code doesn't change.
 
-## How to Play
+| File | Responsibility |
+|------|---------------|
+| `main.py` | Mode selection entry point |
+| `App.py` | Game loop: move input, display, undo, danger check |
+| `Board.py` | Board state, legal move validation, check/mate detection, undo stack |
+| `Fig.py` | `Fig` base class + all piece subclasses (standard + custom) |
+| `Move.py` | Move representation |
+| `Converters.py` | Coordinate utilities |
+| `PieceBoard.py` | Alternate board for Piece mode |
 
-You'll see the instructions when execute the main.py file.
+**Move validation:** `get_val_moves()` simulates each candidate move and discards any that leave the king in check — standard legal move filtering.
 
-## Requirements
+---
 
-- Python 3.x
+## How to run
 
-## Contributing
+```bash
+pip install colorama
+python main.py
+```
 
-If you find any issues or have suggestions for improvement, please feel free to open an issue or create a pull request.
-
-Happy gaming!
+Use keyboard input to select game mode and enter moves. The board is rendered in color in the terminal with legal move highlights.
